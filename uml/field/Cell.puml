@@ -1,0 +1,8 @@
+~class Cell {
+    ~Sign sign
+    ~enum Sign 
+
+    ~Cell() 
+    ~void setSign(Sign sign) 
+    ~Sign getSign() 
+}

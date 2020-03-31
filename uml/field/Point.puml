@@ -1,0 +1,8 @@
++class Point {
+    -int column
+    -int row
+
+    +Point(int column, int row) 
+    +int getColumn() 
+    +int getRow() 
+}

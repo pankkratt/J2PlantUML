@@ -1,0 +1,3 @@
++class MainUml {
+    +{static}void main(String[] args) 
+}
