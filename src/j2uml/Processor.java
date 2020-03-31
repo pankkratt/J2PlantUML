@@ -19,7 +19,9 @@ public class Processor {
     private void cutHead() {
         int from = content.indexOf("package ");
         int to = content.indexOf("\n", from);
-        content.delete(from, to);
+        if (from != -1) {
+            content.delete(from, to);
+        }
         while (true) {
             from = content.indexOf("import ");
             to = content.indexOf("\n", from);
@@ -95,13 +97,14 @@ public class Processor {
         int cursor = 0;
         while (true) {
             int i = content.indexOf("\n    ", cursor);
+            if (i == -1) {
+                break;
+            }
             int i1 = content.indexOf("\n    +", cursor);
             int i2 = content.indexOf("\n    -", cursor);
             int i3 = content.indexOf("\n    #", cursor);
-            if (i != -1 && i != i1 && i != i2 && i != i3) {
+            if (i != i1 && i != i2 && i != i3) {
                 content.insert(i + "\n    ".length(), "~");
-            } else {
-                break;
             }
             cursor = ++i;
         }
@@ -110,5 +113,4 @@ public class Processor {
             content.insert(0, "~");
         }
     }
-
 }
