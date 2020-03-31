@@ -1,3 +1,5 @@
+package j2uml;
+
 import java.util.HashMap;
 import java.util.Map;
 

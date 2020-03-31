@@ -1,3 +1,5 @@
+package j2uml;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -95,7 +97,7 @@ public class Worker {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if (path.contains("java") && path.contains("src")) {
+                if (path.contains("java") && path.contains("src") && !path.contains("j2uml")) {
                     all.add(child);
                 }
                 addTree(child, all);
