@@ -20,7 +20,6 @@ public class Processor {
         int from = content.indexOf("package ");
         int to = content.indexOf("\n", from);
         content.delete(from, to);
-
         while (true) {
             from = content.indexOf("import ");
             to = content.indexOf("\n", from);
@@ -30,8 +29,6 @@ public class Processor {
                 break;
             }
         }
-
-
         while (content.charAt(0) == '\n') {
             content.deleteCharAt(0);
         }
@@ -94,6 +91,23 @@ public class Processor {
                     break;
                 }
             }
+        }
+        int cursor = 0;
+        while (true) {
+            int i = content.indexOf("\n    ", cursor);
+            int i1 = content.indexOf("\n    +", cursor);
+            int i2 = content.indexOf("\n    -", cursor);
+            int i3 = content.indexOf("\n    #", cursor);
+            if (i != -1 && i != i1 && i != i2 && i != i3) {
+                content.insert(i + "\n    ".length(), "~");
+            } else {
+                break;
+            }
+            cursor = ++i;
+        }
+        char ch = content.charAt(0);
+        if (ch != '+' && ch != '-' && ch != '#') {
+            content.insert(0, "~");
         }
     }
 
