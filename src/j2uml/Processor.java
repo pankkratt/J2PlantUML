@@ -11,8 +11,30 @@ public class Processor {
         removeMethodBodies();
         removeEmptyRows();
         removeSemicolons();
+        cutHead();
         changeModifiers();
         return content;
+    }
+
+    private void cutHead() {
+        int from = content.indexOf("package ");
+        int to = content.indexOf("\n", from);
+        content.delete(from, to);
+
+        while (true) {
+            from = content.indexOf("import ");
+            to = content.indexOf("\n", from);
+            if (from != -1) {
+                content.delete(from, to);
+            } else {
+                break;
+            }
+        }
+
+
+        while (content.charAt(0) == '\n') {
+            content.deleteCharAt(0);
+        }
     }
 
     private void removeMethodBodies() {
