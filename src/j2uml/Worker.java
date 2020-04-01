@@ -35,7 +35,7 @@ public class Worker {
         }
         PlantUmlBuilder plantUmlBuilder = new PlantUmlBuilder();
         String plantUmlFile = plantUmlBuilder.buildPlantUmlFile(umlFiles, classNames);
-        String path = "./file.puml";
+        String path = "./current.puml";
         giveContent(plantUmlFile, path);
         System.out.println(plantUmlFile);
     }
