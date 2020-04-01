@@ -15,8 +15,21 @@ public class Processor {
         chunk.setPackageName(packageName);
         changeModifiers();
         removeSemicolons();
+        removeAnnotations();
         chunk.setUmlFile(content);
         return chunk;
+    }
+
+    private void removeAnnotations() {
+        while (true) {
+            int index = content.indexOf("@");
+            if (index == -1) {
+                break;
+            }
+            int from = content.lastIndexOf("\n", index);
+            int to = content.indexOf("\n", index);
+            content.replace(from, to, "");
+        }
     }
 
     private String cutHead() {
@@ -112,7 +125,7 @@ public class Processor {
             int i2 = content.indexOf("\n    -", cursor);
             int i3 = content.indexOf("\n    #", cursor);
             if (i != i1 && i != i2 && i != i3) {
-                    content.insert(i + "\n    ".length(), "~");
+                content.insert(i + "\n    ".length(), "~");
             }
             cursor = ++i;
         }
