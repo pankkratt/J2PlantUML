@@ -5,19 +5,26 @@ import java.util.*;
 
 public class Worker {
     Collection<File> javaFiles;
-    Map<String, List> umlFiles;
+
 
     public void updateUml() {
-        umlFiles = new HashMap<>();
+        Map<String, List<StringBuilder>> umlFiles = new HashMap<>();
+        Set<String> classNames = new HashSet<>();
+
         takeJavaFromSrc();
         for (File javaFile : javaFiles) {
+
+            String className = javaFile.getName();
+            className = className.replace(".java", "");
+            classNames.add(className);
+
             StringBuilder content = takeContent(javaFile);
             Processor processor = new Processor();
             Chunk chunk = processor.process(content);
             String packageName = chunk.getPackageName();
             StringBuilder umlFile = chunk.getUmlFile();
-            if (umlFiles.keySet().contains(packageName)) {
-                List list = umlFiles.get(packageName);
+            if (umlFiles.containsKey(packageName)) {
+                List<StringBuilder> list = umlFiles.get(packageName);
                 list.add(umlFile);
                 umlFiles.put(packageName, list);
             } else {
@@ -26,10 +33,10 @@ public class Worker {
                 umlFiles.put(packageName, list);
             }
         }
-            PlantUmlBuilder plantUmlBuilder = new PlantUmlBuilder(umlFiles);
-            String plantUmlFile = plantUmlBuilder.buildPlantUmlFile();
-            String path = "./file.puml";
-            giveContent(plantUmlFile, path);
+        PlantUmlBuilder plantUmlBuilder = new PlantUmlBuilder();
+        String plantUmlFile = plantUmlBuilder.buildPlantUmlFile(umlFiles, classNames);
+        String path = "./file.puml";
+        giveContent(plantUmlFile, path);
         System.out.println(plantUmlFile);
     }
 
@@ -80,28 +87,13 @@ public class Worker {
         return null;
     }
 
-    private String createUmlFile(File javaFile) {
-        String parent = javaFile.getParent().replaceAll("src", "uml");
-        String name = javaFile.getName().replaceAll("java", "puml");
-        File file = new File(parent);
-        file.mkdirs();
-        file = new File(parent, name);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return file.getPath();
-    }
-
     private void takeJavaFromSrc() {
-        javaFiles = new ArrayList<File>();
+        javaFiles = new ArrayList<>();
         addTree(new File("."), javaFiles);
     }
 
     private void addTree(File file, Collection<File> all) {
+        // copy/paste
         File[] children = file.listFiles();
         if (children != null) {
             for (File child : children) {
@@ -111,12 +103,11 @@ public class Worker {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if (path.contains("java") && path.contains("src") && !path.contains("j2uml")) {
+                if (path != null && path.contains("java") && path.contains("src") && !path.contains("j2uml")) {
                     all.add(child);
                 }
                 addTree(child, all);
             }
         }
     }
-
 }
