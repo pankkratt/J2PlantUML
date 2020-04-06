@@ -41,9 +41,9 @@ public class PlantUmlBuilder {
             if (!className.equals(currentClassName)) {
                 int from = classUml.indexOf("{");
                 int to = classUml.indexOf("\n\n");
-                if (classUml.indexOf(className, from) != -1 && classUml.lastIndexOf(className, to) != -1) {
+                if (classUml.indexOf(className + " ", from) != -1 && classUml.lastIndexOf(className, to) != -1) {
                     links.append(currentClassName);
-                    links.append(" o-- ");
+                    links.append(" o--- ");
                     links.append(className);
                     links.append("\n");
                 }
@@ -56,7 +56,7 @@ public class PlantUmlBuilder {
         String currentClassName = "";
         for (String className : classNames) {
             int from = classUml.indexOf("\n");
-            int index = classUml.lastIndexOf(className, from);
+            int index = classUml.lastIndexOf(" " + className, from);
             if (index != -1 && index < minIndex) {
                 currentClassName = className;
             }
